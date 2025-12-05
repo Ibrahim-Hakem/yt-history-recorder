@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Click Recorder (MVP)",
+  "version": "0.1",
+  "description": "Enregistre chaque vidéo YouTube visitée : url, titre, miniature, heure de clic et (optionnel) heure de sortie.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://www.youtube.com/*",
+    "*://youtube.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "YouTube History",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.ico",
+      "48": "icons/icon48.ico",
+      "128": "icons/icon128.ico"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content_script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["history.html", "styles.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
+

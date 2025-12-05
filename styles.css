@@ -1,0 +1,24 @@
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin: 0;
+  padding: 14px;
+  color: #111;
+  background: #f7f7f8;
+}
+main { max-width: 900px; margin: 0 auto; }
+header { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+h1 { margin:0; font-size:1.2rem; }
+.controls button { margin-left:8px; }
+button { padding:8px 10px; border-radius:6px; border:1px solid #ccc; background:white; cursor:pointer; }
+button.danger { color: #fff; background: #c33; border-color: #922; }
+#list { margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+.entry { display:flex; gap:12px; padding:10px; background:white; border-radius:8px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); align-items:center; }
+.entry img { width:120px; height:67px; object-fit:cover; border-radius:6px; }
+.entry .meta { flex:1; }
+.entry .meta h3 { margin: 0 0 6px 0; font-size:1rem; }
+.entry .meta a { text-decoration:none; color:inherit; }
+.entry .meta .time { font-size:0.85rem; color:#555; }
+.entry .actions { display:flex; flex-direction:column; gap:6px; }
+.entry .actions button { padding:6px 8px; font-size:0.85rem; }
+.small { font-size:0.85rem; color:#666; }
+
