@@ -1,7 +1,6 @@
 const BROWSER = (typeof browser !== "undefined") ? browser : chrome;
 document.getElementById("open-history").addEventListener("click", () => {
-  // envoie un message au background pour ouvrir history.html
-  BROWSER.runtime.sendMessage({ type: "open-history" });
+  BROWSER.runtime.sendMessage({ action: "open-history" });
   window.close();
 });
 
@@ -24,4 +23,5 @@ document.getElementById("export-json").addEventListener("click", async () => {
   URL.revokeObjectURL(url);
   window.close();
 });
+
 

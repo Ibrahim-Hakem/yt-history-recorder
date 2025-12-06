@@ -210,5 +210,68 @@ document.getElementById("export-json").addEventListener("click", async () => {
   URL.revokeObjectURL(url);
 });
 
+// Ajoute ceci dans history.js (importer + merge)
+async function importJsonFile(file) {
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if (!Array.isArray(parsed)) {
+      alert("Fichier JSON invalide : attendu un tableau d'entrées.");
+      return;
+    }
+
+    // récupérer stockage actuel
+    const s = await browser.storage.local.get({ yt_click_history: [] });
+    const existing = s.yt_click_history || [];
+
+    // index existant par sessionId (ou fallback par id+clickedAt)
+    const idx = new Map();
+    for (const e of existing) {
+      if (e.sessionId) idx.set(e.sessionId, e);
+      else idx.set(`${e.id}::${e.clickedAt}`, e);
+    }
+
+    let added = 0, updated = 0;
+    for (const e of parsed) {
+      if (!e) continue;
+      let key = e.sessionId || `${e.id}::${e.clickedAt}`;
+      if (idx.has(key)) {
+        // fusionner intelligemment : garder valeurs existantes sauf si nouvelle a plus d'infos
+        const cur = idx.get(key);
+        const merged = Object.assign({}, cur, e);
+        // remplacer dans existing
+        const pos = existing.findIndex(x => (x.sessionId && x.sessionId === key) || (`${x.id}::${x.clickedAt}` === key));
+        if (pos >= 0) existing[pos] = merged;
+        updated++;
+      } else {
+        existing.push(e);
+        idx.set(key, e);
+        added++;
+      }
+    }
+
+    await browser.storage.local.set({ yt_click_history: existing });
+    alert(`Import terminé. ${added} ajoutées, ${updated} mises à jour.`);
+    // re-render si page d'historique ouverte
+    if (typeof loadAndRender === "function") loadAndRender();
+  } catch (err) {
+    console.error("Import error", err);
+    alert("Erreur lors de l'import : voir console pour détails.");
+  }
+}
+
+// liaison UI : si tu as un input file avec id="import-file"
+const importInput = document.getElementById("import-file");
+if (importInput) {
+  importInput.addEventListener("change", (ev) => {
+    const f = ev.target.files && ev.target.files[0];
+    if (f) importJsonFile(f);
+    importInput.value = "";
+  });
+}
+
+
+
 loadAndRender();
 
