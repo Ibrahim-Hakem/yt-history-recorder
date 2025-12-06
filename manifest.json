@@ -1,45 +1,55 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "YouTube Click Recorder (MVP)",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Enregistre chaque vidéo YouTube visitée : url, titre, miniature, heure de clic et de sortie.",
   "permissions": [
     "storage",
     "tabs",
-    "activeTab"
+    "activeTab",
+    "downloads"
   ],
-  "host_permissions": [
-    "*://www.youtube.com/*",
-    "*://youtube.com/*"
-  ],
-
   "background": {
-    "scripts": ["background.js"] 
+    "scripts": ["background.js"],
+    "persistent": true
   },
-
-  "action": {
+  "browser_action": {
     "default_title": "YouTube History",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
+      "64": "icons/icon64.png",
       "128": "icons/icon128.png"
     }
   },
-
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
+      "matches": [
+        "*://www.youtube.com/*",
+        "*://youtube.com/*",
+        "*://m.youtube.com/*",
+        "*://youtu.be/*",
+        "*://www.youtube-nocookie.com/*"
+      ],
       "js": ["content_script.js"],
       "run_at": "document_idle"
     }
   ],
-
   "web_accessible_resources": [
-    {
-      "resources": ["history.html", "styles.css"],
-      "matches": ["<all_urls>"]
+    "history.html",
+    "styles.css"
+  ],
+  "icons": {
+    "64": "icons/icon64.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "@syllogene", 
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
-  ]
+  }
 }
 
